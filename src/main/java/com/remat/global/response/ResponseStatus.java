@@ -1,5 +1,6 @@
 package com.remat.global.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.remat.global.code.CommonResponseCode;
 import com.remat.global.code.ResponseCode;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseStatus {
     private String statusCode;
     private String message;
