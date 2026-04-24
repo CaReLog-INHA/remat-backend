@@ -105,13 +105,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Object> handleRuntimeException(RuntimeException e) {
         if (e instanceof CustomException) {
             return handleCustomException((CustomException) e);
         }
-        log.warn("Unhandled runtime exception occurred: {}", e.getMessage());
-        return ApiResponse.error(CommonResponseCode.BAD_REQUEST_ERROR, e.getMessage());
+        log.warn("Unhandled runtime exception occurred: {}", e);
+        return ApiResponse.error(CommonResponseCode.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
