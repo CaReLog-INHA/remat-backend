@@ -23,4 +23,8 @@ public class AIMatchedMaterial extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "matched_material_id", nullable = false)
     private Material matchedMaterial;
+
+    public void setAiAnalysis(AIAnalysis aiAnalysis){
+        this.aiAnalysis = aiAnalysis;
+    }
 }

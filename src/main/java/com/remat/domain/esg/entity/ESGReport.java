@@ -53,4 +53,14 @@ public class ESGReport extends BaseEntity {
     @OneToMany(mappedBy = "esgReport", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ESGReportDetail> reportDetails = new ArrayList<>();
+
+    public void addMonthlyReport(ESGReportMonthly esgReportMonthly){
+        monthlyReports.add(esgReportMonthly);
+        esgReportMonthly.setEsgReport(this);
+    }
+
+    public void addReportDetails(ESGReportDetail esgReportDetail){
+        reportDetails.add(esgReportDetail);
+        esgReportDetail.setEsgReport(this);
+    }
 }

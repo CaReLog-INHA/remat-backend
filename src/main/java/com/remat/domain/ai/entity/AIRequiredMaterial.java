@@ -25,4 +25,8 @@ public class AIRequiredMaterial extends BaseEntity {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    public void setAiAnalysis(AIAnalysis aiAnalysis){
+        this.aiAnalysis = aiAnalysis;
+    }
 }

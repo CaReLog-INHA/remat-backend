@@ -44,4 +44,14 @@ public class AIAnalysis extends BaseEntity {
     @OneToMany(mappedBy = "aiAnalysis", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<AIRequiredMaterial> aiRequiredMaterials = new ArrayList<>();
+
+    public void addMatchedMaterial(AIMatchedMaterial matchedMaterial){
+        aiMatchedMaterials.add(matchedMaterial);
+        matchedMaterial.setAiAnalysis(this);
+    }
+
+    public void addRequiredMaterial(AIRequiredMaterial requiredMaterial){
+        aiRequiredMaterials.add(requiredMaterial);
+        requiredMaterial.setAiAnalysis(this);
+    }
 }
