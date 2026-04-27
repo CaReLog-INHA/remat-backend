@@ -31,8 +31,8 @@ public class Material extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private MaterialCategory category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id", nullable = false)
+    @Column(name = "region", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Region region;
 
     @Column(name = "material_name", length = 50, nullable = false)
