@@ -18,8 +18,8 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id", nullable = false)
+    @Column(name = "region", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Region region;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -27,6 +27,9 @@ public class Member extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
