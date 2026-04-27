@@ -72,7 +72,7 @@ public enum Region {
                 return region;
             }
         }
-        throw new IllegalArgumentException("존재하지 않는 지역입니다: " + koreanName);
+        throw new IllegalArgumentException();
     }
 
     public static Region fromEnglishName(String englishName) {
@@ -81,6 +81,6 @@ public enum Region {
                 return region;
             }
         }
-        throw new IllegalArgumentException("존재하지 않는 지역입니다: " + englishName);
+        throw new IllegalArgumentException();
     }
 }

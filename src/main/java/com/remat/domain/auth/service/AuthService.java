@@ -35,7 +35,13 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.DUPLICATED_EMAIL);
         }
 
-        Region region = Region.fromKoreanName(reqDto.regionName());
+        Region region;
+
+        try{
+            region = Region.fromKoreanName(reqDto.regionName());
+        } catch (IllegalArgumentException e){
+            throw new AuthException(AuthErrorCode.INVALID_REGION_NAME);
+        }
 
         Member member = Member.builder()
                 .name(reqDto.name())
