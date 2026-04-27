@@ -67,7 +67,7 @@ public class AuthService {
     public AuthResDTO.RefreshTokenDTO refresh(AuthReqDTO.RefreshTokenDTO reqDto) {
         String refreshToken = reqDto.refreshToken();
 
-        if (!jwtUtil.validateToken(refreshToken)) {
+        if (!jwtUtil.validateToken(refreshToken)|| !jwtUtil.isRefreshToken(refreshToken)) {
             throw new AuthException(AuthErrorCode.INVALID_REFRESH_TOKEN);
         }
 

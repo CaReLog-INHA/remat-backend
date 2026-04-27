@@ -16,6 +16,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    private static final String ACCESS_TOKEN = "access_token";
+    private static final String REFRESH_TOKEN = "refresh_token";
+
     private final SecretKey secretKey;
     private final Long accessTokenValidTime;
     private final Long refreshTokenValidTime;
@@ -31,14 +34,14 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(String email){
-        return generateToken(email, accessTokenValidTime);
+        return generateToken(email, accessTokenValidTime, ACCESS_TOKEN);
     }
 
     public String generateRefreshToken(String email){
-        return generateToken(email, refreshTokenValidTime);
+        return generateToken(email, refreshTokenValidTime, REFRESH_TOKEN);
     }
 
-    public String generateToken(String email, Long validityTime) {
+    public String generateToken(String email, Long validityTime, String tokenType) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + validityTime);
 
@@ -46,6 +49,7 @@ public class JwtUtil {
                 .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
+                .claim("token_type", tokenType)
                 .signWith(secretKey)
                 .compact();
     }
@@ -65,6 +69,10 @@ public class JwtUtil {
             // 토큰 손상 또는 잘못된 서명
             return false;
         }
+    }
+
+    public boolean isRefreshToken(String token) {
+        return REFRESH_TOKEN.equals(getClaims(token).get("token_type"));
     }
 
     private Claims getClaims(String token){
