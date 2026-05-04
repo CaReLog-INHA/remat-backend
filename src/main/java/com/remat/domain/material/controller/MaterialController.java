@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -55,7 +56,7 @@ public class MaterialController {
     })
     @PostMapping
     public ApiResponse<Void> createMaterial(
-            @RequestBody MaterialReqDTO.CreateDTO reqDto,
+            @RequestBody @Valid MaterialReqDTO.CreateDTO reqDto,
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         materialService.createMaterial(reqDto, userDetails.getMember());
