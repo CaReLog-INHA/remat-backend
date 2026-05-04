@@ -55,8 +55,8 @@ public class Material extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "image_key", nullable = false)
+    private String imageKey;
 
     @Column(name = "unit", nullable = false)
     private Integer unit;

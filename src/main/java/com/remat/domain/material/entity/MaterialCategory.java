@@ -20,6 +20,13 @@ public class MaterialCategory extends BaseEntity {
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
+
+    @Column(name = "avg_weight_kg", nullable = false)
+    private Double avgWeightKg;
+
+    // 자재 1kg당 CO2 배출량 (g CO2 eq/kg). 값이 클수록 재사용/대체 시 감축 효과 큼
     @Column(name = "esg_effect", nullable = false)
     private Integer esgEffect;
 }
