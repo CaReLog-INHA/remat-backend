@@ -18,8 +18,16 @@ spring:
       hibernate:
         format_sql: true
 
-# JWT ??
+# JWT
 jwt:
   secret: ${JWT_SECRET_KEY}
   access-token-validity: ${JWT_ACCESS_TOKEN_EXPIRATION:3600000}
   refresh-token-validity: ${JWT_REFRESH_TOKEN_EXPIRATION:86400000}
+
+# Cloudflare R2
+r2:
+  endpoint: ${R2_ENDPOINT}
+  access-key: ${R2_ACCESS_KEY}
+  secret-key: ${R2_SECRET_KEY}
+  bucket: ${R2_BUCKET}
+  public-url: ${R2_PUBLIC_URL}
