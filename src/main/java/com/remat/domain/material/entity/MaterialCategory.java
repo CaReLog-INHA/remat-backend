@@ -20,7 +20,7 @@ public class MaterialCategory extends BaseEntity {
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @Column(name = "display_name", nullable = false)
+    @Column(name = "display_name", nullable = false, unique = true)
     private String displayName;
 
     @Column(name = "avg_weight_kg", nullable = false)

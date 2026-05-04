@@ -26,6 +26,6 @@ public class MaterialResDTO {
     ) {}
 
     public record ImageUploadDTO(
-            String key
+            String imageKey
     ) {}
 }
