@@ -17,7 +17,7 @@ public class SwaggerConfig {
         Info info = new Info().title("ReMat-server").description("ReMat 백엔드 API 명세입니다.").version("0.0.1");
 
         // JWT 토큰 헤더 방식
-        String securityScheme = "JWT TOKEN";
+        String securityScheme = "JWT";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityScheme);
 
         Components components = new Components()
