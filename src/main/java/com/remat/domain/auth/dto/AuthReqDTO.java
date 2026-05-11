@@ -1,5 +1,7 @@
 package com.remat.domain.auth.dto;
 
+import com.remat.domain.member.entity.Region;
+
 public class AuthReqDTO {
 
     public record SignUpDTO(
@@ -7,7 +9,7 @@ public class AuthReqDTO {
             String phoneNumber,
             String companyName,
             String email,
-            String regionName, // 한글이름
+            Region region,
             String password,
             String passwordCheck
     ){}

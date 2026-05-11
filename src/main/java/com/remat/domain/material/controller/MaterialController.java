@@ -2,14 +2,17 @@ package com.remat.domain.material.controller;
 
 import com.remat.domain.material.dto.MaterialReqDTO;
 import com.remat.domain.material.dto.MaterialResDTO;
+import java.util.List;
+import com.remat.domain.material.entity.enums.MaterialCondition;
+import com.remat.domain.material.entity.enums.TransactionType;
 import com.remat.domain.material.service.MaterialService;
+import com.remat.domain.member.entity.Region;
 import com.remat.global.auth.UserDetailsImpl;
 import com.remat.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +30,30 @@ public class MaterialController {
     private final MaterialService materialService;
 
     @Operation(
+            summary = "자재 목록 조회",
+            description = "마켓플레이스의 자재 목록을 최근 등록순으로 조회합니다. 인증 없이 접근 가능합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공"),
+    })
+    @GetMapping
+    public ApiResponse<List<MaterialResDTO.ListDTO>> getMaterials(
+            @Parameter(description = "카테고리 (미입력 시 전체 조회)", example = "콘크리트")
+            @RequestParam(required = false) String categoryName,
+            @Parameter(description = "자재 상태 (BEST / GOOD / NORMAL)", example = "BEST")
+            @RequestParam(required = false) MaterialCondition materialCondition,
+            @Parameter(description = "거래 유형 (SALE / RENTAL)", example = "SALE")
+            @RequestParam(required = false) TransactionType transactionType,
+            @Parameter(description = "지역 (INCHEON, SEOUL 등)", example = "INCHEON")
+            @RequestParam(required = false) Region region
+    ) {
+        List<MaterialResDTO.ListDTO> resDto = materialService.getMaterials(categoryName, materialCondition, transactionType, region);
+        return ApiResponse.ok(resDto);
+    }
+
+    @Operation(
             summary = "자재 이미지 업로드",
-            description = "자재 이미지를 R2 스토리지에 업로드하고 이미지 key를 반환합니다. 자재 등록 시 반환된 key를 사용하세요.",
-            security = @SecurityRequirement(name = "JWT")
+            description = "자재 이미지를 R2 스토리지에 업로드하고 이미지 key를 반환합니다. 자재 등록 시 반환된 key를 사용하세요."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "업로드 성공"),
@@ -46,8 +70,7 @@ public class MaterialController {
 
     @Operation(
             summary = "자재 등록",
-            description = "새로운 자재를 등록합니다. 이미지 업로드 후 반환된 key를 imageKey 필드에 입력하세요.",
-            security = @SecurityRequirement(name = "JWT")
+            description = "새로운 자재를 등록합니다. 이미지 업로드 후 반환된 key를 imageKey 필드에 입력하세요."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "등록 성공"),

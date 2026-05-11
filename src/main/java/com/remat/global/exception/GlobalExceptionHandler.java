@@ -15,6 +15,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
@@ -45,6 +46,17 @@ public class GlobalExceptionHandler {
                 : "유효하지 않은 요청입니다";
 
         return ApiResponse.error(CommonResponseCode.NOT_VALID_ERROR, message);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
+        Class<?> requiredType = e.getRequiredType();
+        if (requiredType != null && requiredType.isEnum()) {
+            String message = "올바르지 않은 값입니다: " + e.getValue();
+            return ApiResponse.error(CommonResponseCode.NOT_VALID_ERROR, message);
+        }
+        return ApiResponse.error(CommonResponseCode.NOT_VALID_ERROR, e.getMessage());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -39,29 +41,23 @@ public class MaterialService {
         MaterialCategory category = materialCategoryRepository.findByDisplayName(reqDto.categoryName())
                 .orElseThrow(() -> new MaterialException(MaterialErrorCode.CATEGORY_NOT_FOUND));
 
-        Region region;
-        try {
-            region = Region.fromKoreanName(reqDto.regionName());
-        } catch (IllegalArgumentException e) {
-            throw new MaterialException(MaterialErrorCode.INVALID_REGION_NAME);
-        }
-
-        MaterialCondition condition;
-        try {
-            condition = MaterialCondition.valueOf(reqDto.materialCondition());
-        } catch (IllegalArgumentException e) {
-            throw new MaterialException(MaterialErrorCode.INVALID_MATERIAL_CONDITION);
-        }
-
-        TransactionType transactionType;
-        try {
-            transactionType = TransactionType.valueOf(reqDto.transactionType());
-        } catch (IllegalArgumentException e) {
-            throw new MaterialException(MaterialErrorCode.INVALID_TRANSACTION_TYPE);
-        }
-
-        Material material = MaterialConverter.toEntity(reqDto, member, category, region, condition, transactionType);
+        Material material = MaterialConverter.toEntity(reqDto, member, category);
         materialRepository.save(material);
+    }
+
+    public List<MaterialResDTO.ListDTO> getMaterials(
+            String categoryName, MaterialCondition materialCondition, TransactionType transactionType, Region region
+    ) {
+        MaterialCategory category = null;
+        if (categoryName != null) {
+            category = materialCategoryRepository.findByDisplayName(categoryName)
+                    .orElseThrow(() -> new MaterialException(MaterialErrorCode.CATEGORY_NOT_FOUND));
+        }
+
+        return materialRepository.findAllWithFilters(category, materialCondition, transactionType, region)
+                .stream()
+                .map(material -> MaterialConverter.toListDTO(material, r2Service.getFileUrl(material.getImageKey())))
+                .toList();
     }
 
     public MaterialResDTO.DetailDTO getMaterialDetail(Long materialId) {

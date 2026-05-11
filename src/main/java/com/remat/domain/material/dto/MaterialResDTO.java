@@ -7,6 +7,20 @@ import java.time.LocalDateTime;
 
 public class MaterialResDTO {
 
+    public record ListDTO(
+            Long id,
+            String materialName,
+            Integer price,
+            Integer quantity,
+            Integer unit,
+            MaterialCondition materialCondition,
+            TransactionType transactionType,
+            String imageUrl,
+            String categoryName,
+            String region,
+            LocalDateTime createdAt
+    ) {}
+
     public record DetailDTO(
             Long id,
             String materialName,
@@ -22,6 +36,7 @@ public class MaterialResDTO {
             String region,
             String sellerName,
             String companyName,
+            Integer starRating,
             LocalDateTime createdAt
     ) {}
 
