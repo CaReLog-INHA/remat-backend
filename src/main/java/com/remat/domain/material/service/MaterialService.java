@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -62,6 +64,21 @@ public class MaterialService {
 
         Material material = MaterialConverter.toEntity(reqDto, member, category, region, condition, transactionType);
         materialRepository.save(material);
+    }
+
+    public List<MaterialResDTO.ListDTO> getMaterials(
+            String categoryName, MaterialCondition materialCondition, TransactionType transactionType, Region region
+    ) {
+        MaterialCategory category = null;
+        if (categoryName != null) {
+            category = materialCategoryRepository.findByDisplayName(categoryName)
+                    .orElseThrow(() -> new MaterialException(MaterialErrorCode.CATEGORY_NOT_FOUND));
+        }
+
+        return materialRepository.findAllWithFilters(category, materialCondition, transactionType, region)
+                .stream()
+                .map(material -> MaterialConverter.toListDTO(material, r2Service.getFileUrl(material.getImageKey())))
+                .toList();
     }
 
     public MaterialResDTO.DetailDTO getMaterialDetail(Long materialId) {
