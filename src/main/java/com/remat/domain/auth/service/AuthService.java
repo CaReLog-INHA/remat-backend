@@ -5,7 +5,6 @@ import com.remat.domain.auth.dto.AuthResDTO;
 import com.remat.domain.auth.exception.AuthException;
 import com.remat.domain.auth.exception.enums.AuthErrorCode;
 import com.remat.domain.member.entity.Member;
-import com.remat.domain.member.entity.Region;
 import com.remat.domain.member.repository.MemberRepository;
 import com.remat.global.auth.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
@@ -35,20 +34,12 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.DUPLICATED_EMAIL);
         }
 
-        Region region;
-
-        try{
-            region = Region.fromKoreanName(reqDto.regionName());
-        } catch (IllegalArgumentException e){
-            throw new AuthException(AuthErrorCode.INVALID_REGION_NAME);
-        }
-
         Member member = Member.builder()
                 .name(reqDto.name())
                 .email(reqDto.email())
                 .companyName(reqDto.companyName())
                 .phoneNumber(reqDto.phoneNumber())
-                .region(region)
+                .region(reqDto.region())
                 .password(passwordEncoder.encode(reqDto.password()))
                 .build();
 
