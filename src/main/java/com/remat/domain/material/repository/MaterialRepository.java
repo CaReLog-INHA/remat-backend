@@ -4,6 +4,7 @@ import com.remat.domain.material.entity.Material;
 import com.remat.domain.material.entity.MaterialCategory;
 import com.remat.domain.material.entity.enums.MaterialCondition;
 import com.remat.domain.material.entity.enums.TransactionType;
+import com.remat.domain.member.entity.Member;
 import com.remat.domain.member.entity.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public interface MaterialRepository extends JpaRepository<Material, Long> {
 
     Optional<Material> findByIdAndDeletedAtIsNull(Long id);
+
+    List<Material> findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(Member member);
 
     @Query("SELECT m FROM Material m WHERE m.deletedAt IS NULL " +
             "AND (:category IS NULL OR m.category = :category) " +

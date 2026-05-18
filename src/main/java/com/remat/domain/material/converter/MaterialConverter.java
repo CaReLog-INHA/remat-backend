@@ -44,6 +44,23 @@ public class MaterialConverter {
         );
     }
 
+    public static MaterialResDTO.MyListDTO toMyListDTO(Material material, String imageUrl) {
+        return new MaterialResDTO.MyListDTO(
+                material.getId(),
+                material.getMaterialName(),
+                material.getDescription(),
+                material.getPrice(),
+                material.getQuantity(),
+                material.getUnit(),
+                material.getMaterialCondition(),
+                material.getTransactionType(),
+                imageUrl,
+                material.getCategory().getDisplayName(),
+                material.getRegion().getKoreanName(),
+                material.getCreatedAt()
+        );
+    }
+
     public static MaterialResDTO.DetailDTO toDetailDTO(Material material, String imageUrl) {
         return new MaterialResDTO.DetailDTO(
                 material.getId(),

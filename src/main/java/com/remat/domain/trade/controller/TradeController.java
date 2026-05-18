@@ -1,6 +1,7 @@
 package com.remat.domain.trade.controller;
 
 import com.remat.domain.trade.dto.TradeReqDTO;
+import com.remat.domain.trade.dto.TradeResDTO;
 import com.remat.domain.trade.service.TradeService;
 import com.remat.global.auth.UserDetailsImpl;
 import com.remat.global.response.ApiResponse;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "거래", description = "거래 관련 API")
 @RestController
@@ -39,5 +42,21 @@ public class TradeController {
     ) {
         tradeService.createTradeRequest(reqDto, userDetails.getMember());
         return ApiResponse.ok();
+    }
+
+    @Operation(
+            summary = "받은 거래 요청 목록 조회",
+            description = "로그인한 회원이 등록한 자재에 대해 들어온 거래 요청 목록을 최신순으로 조회합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+    })
+    @GetMapping("/requests/received")
+    public ApiResponse<List<TradeResDTO.ReceivedRequestDTO>> getReceivedTradeRequests(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        List<TradeResDTO.ReceivedRequestDTO> resDto = tradeService.getReceivedTradeRequests(userDetails.getMember());
+        return ApiResponse.ok(resDto);
     }
 }

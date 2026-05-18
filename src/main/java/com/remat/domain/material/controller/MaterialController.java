@@ -52,6 +52,22 @@ public class MaterialController {
     }
 
     @Operation(
+            summary = "내가 등록한 자재 목록 조회",
+            description = "로그인한 회원이 직접 등록한 자재 목록을 최근 등록순으로 조회합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+    })
+    @GetMapping("/me")
+    public ApiResponse<List<MaterialResDTO.MyListDTO>> getMyMaterials(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        List<MaterialResDTO.MyListDTO> resDto = materialService.getMyMaterials(userDetails.getMember());
+        return ApiResponse.ok(resDto);
+    }
+
+    @Operation(
             summary = "자재 이미지 업로드",
             description = "자재 이미지를 R2 스토리지에 업로드하고 이미지 key를 반환합니다. 자재 등록 시 반환된 key를 사용하세요."
     )

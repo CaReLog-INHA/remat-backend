@@ -6,13 +6,17 @@ import com.remat.domain.material.repository.MaterialRepository;
 import com.remat.domain.member.entity.Member;
 import com.remat.domain.trade.converter.TradeConverter;
 import com.remat.domain.trade.dto.TradeReqDTO;
+import com.remat.domain.trade.dto.TradeResDTO;
 import com.remat.domain.trade.entity.TradeRequest;
 import com.remat.domain.trade.exception.TradeException;
 import com.remat.domain.trade.exception.enums.TradeErrorCode;
 import com.remat.domain.trade.repository.TradeRequestRepository;
+import com.remat.global.service.R2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class TradeService {
 
     private final TradeRequestRepository tradeRequestRepository;
     private final MaterialRepository materialRepository;
+    private final R2Service r2Service;
 
     @Transactional
     public void createTradeRequest(TradeReqDTO.CreateDTO reqDto, Member member) {
@@ -46,5 +51,14 @@ public class TradeService {
 
         TradeRequest tradeRequest = TradeConverter.toEntity(reqDto, member, material);
         tradeRequestRepository.save(tradeRequest);
+    }
+
+    public List<TradeResDTO.ReceivedRequestDTO> getReceivedTradeRequests(Member member) {
+        return tradeRequestRepository.findReceivedRequestsByOwner(member).stream()
+                .map(tradeRequest -> TradeConverter.toReceivedRequestDTO(
+                        tradeRequest,
+                        r2Service.getFileUrl(tradeRequest.getRequestMaterial().getImageKey())
+                ))
+                .toList();
     }
 }
