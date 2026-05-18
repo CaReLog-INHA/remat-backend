@@ -61,4 +61,13 @@ public class TradeService {
                 ))
                 .toList();
     }
+
+    public List<TradeResDTO.SentRequestDTO> getSentTradeRequests(Member member) {
+        return tradeRequestRepository.findSentRequestsByRequester(member).stream()
+                .map(tradeRequest -> TradeConverter.toSentRequestDTO(
+                        tradeRequest,
+                        r2Service.getFileUrl(tradeRequest.getRequestMaterial().getImageKey())
+                ))
+                .toList();
+    }
 }

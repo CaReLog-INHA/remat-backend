@@ -47,4 +47,31 @@ public class TradeConverter {
                 tradeRequest.getCreatedAt()
         );
     }
+
+    public static TradeResDTO.SentRequestDTO toSentRequestDTO(TradeRequest tradeRequest, String imageUrl) {
+        Material material = tradeRequest.getRequestMaterial();
+        Member seller = material.getMember();
+
+        return new TradeResDTO.SentRequestDTO(
+                tradeRequest.getId(),
+                tradeRequest.getRequestStatus(),
+                material.getId(),
+                material.getMaterialName(),
+                material.getPrice(),
+                tradeRequest.getQuantity(),
+                material.getUnit(),
+                material.getTransactionType(),
+                imageUrl,
+                material.getCategory().getDisplayName(),
+                material.getRegion().getKoreanName(),
+                seller.getId(),
+                seller.getName(),
+                seller.getCompanyName(),
+                seller.getStarRating(),
+                tradeRequest.getRequestMessage(),
+                tradeRequest.getRentalStart(),
+                tradeRequest.getRentalEnd(),
+                tradeRequest.getCreatedAt()
+        );
+    }
 }

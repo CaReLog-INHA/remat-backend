@@ -59,4 +59,20 @@ public class TradeController {
         List<TradeResDTO.ReceivedRequestDTO> resDto = tradeService.getReceivedTradeRequests(userDetails.getMember());
         return ApiResponse.ok(resDto);
     }
+
+    @Operation(
+            summary = "보낸 거래 요청 목록 조회",
+            description = "로그인한 회원이 보낸 거래 요청 목록을 최신순으로 조회합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+    })
+    @GetMapping("/requests/sent")
+    public ApiResponse<List<TradeResDTO.SentRequestDTO>> getSentTradeRequests(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        List<TradeResDTO.SentRequestDTO> resDto = tradeService.getSentTradeRequests(userDetails.getMember());
+        return ApiResponse.ok(resDto);
+    }
 }
