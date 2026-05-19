@@ -5,6 +5,7 @@ import com.remat.domain.member.entity.Member;
 import com.remat.domain.trade.dto.TradeReqDTO;
 import com.remat.domain.trade.dto.TradeResDTO;
 import com.remat.domain.trade.entity.Trade;
+import com.remat.domain.trade.entity.TradeReview;
 import com.remat.domain.trade.entity.TradeRequest;
 import com.remat.domain.trade.entity.enums.RequestStatus;
 
@@ -19,6 +20,16 @@ public class TradeConverter {
                 .requestStatus(RequestStatus.PENDING)
                 .rentalStart(reqDto.rentalStart())
                 .rentalEnd(reqDto.rentalEnd())
+                .build();
+    }
+
+    public static TradeReview toReviewEntity(TradeReqDTO.ReviewCreateDTO reqDto, Member reviewer, Member reviewee, Trade trade) {
+        return TradeReview.builder()
+                .reviewer(reviewer)
+                .reviewee(reviewee)
+                .trade(trade)
+                .starRating(reqDto.starRating())
+                .description(reqDto.description())
                 .build();
     }
 

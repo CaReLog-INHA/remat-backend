@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TradeRepository extends JpaRepository<Trade, Long> {
@@ -37,4 +38,11 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
             "AND m.deletedAt IS NULL " +
             "ORDER BY t.createdAt DESC")
     List<Trade> findSoldTradesBySeller(@Param("seller") Member seller);
+
+    @Query("SELECT t FROM Trade t " +
+            "JOIN FETCH t.seller s " +
+            "JOIN FETCH t.buyer b " +
+            "WHERE t.id = :tradeId " +
+            "AND t.deletedAt IS NULL")
+    Optional<Trade> findByIdAndDeletedAtIsNullWithMembers(@Param("tradeId") Long tradeId);
 }

@@ -107,4 +107,27 @@ public class TradeController {
         List<TradeResDTO.SoldTradeDTO> resDto = tradeService.getSoldTrades(userDetails.getMember());
         return ApiResponse.ok(resDto);
     }
+
+    @Operation(
+            summary = "거래 후기 등록",
+            description = "완료된 거래에 대해 거래 참여자가 상대방에게 평점과 후기를 남깁니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "등록 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청 (평점 범위 / 후기 내용 누락)", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "거래 참여자 아님", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "존재하지 않는 거래", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이미 리뷰 작성", content = @Content),
+    })
+    @PostMapping("/{tradeId}/reviews")
+    public ApiResponse<Void> createTradeReview(
+            @Parameter(description = "거래 ID", required = true, example = "1")
+            @PathVariable Long tradeId,
+            @RequestBody @Valid TradeReqDTO.ReviewCreateDTO reqDto,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        tradeService.createTradeReview(tradeId, reqDto, userDetails.getMember());
+        return ApiResponse.ok();
+    }
 }

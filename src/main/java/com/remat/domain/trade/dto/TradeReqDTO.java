@@ -1,6 +1,7 @@
 package com.remat.domain.trade.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,5 +15,10 @@ public class TradeReqDTO {
             @NotBlank String requestMessage,
             LocalDate rentalStart,
             LocalDate rentalEnd
+    ) {}
+
+    public record ReviewCreateDTO(
+            @NotNull @Min(1) @Max(5) Integer starRating,
+            @NotBlank String description
     ) {}
 }

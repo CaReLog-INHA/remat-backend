@@ -7,10 +7,12 @@ import com.remat.domain.member.entity.Member;
 import com.remat.domain.trade.converter.TradeConverter;
 import com.remat.domain.trade.dto.TradeReqDTO;
 import com.remat.domain.trade.dto.TradeResDTO;
+import com.remat.domain.trade.entity.Trade;
 import com.remat.domain.trade.entity.TradeRequest;
 import com.remat.domain.trade.exception.TradeException;
 import com.remat.domain.trade.exception.enums.TradeErrorCode;
 import com.remat.domain.trade.repository.TradeRequestRepository;
+import com.remat.domain.trade.repository.TradeReviewRepository;
 import com.remat.domain.trade.repository.TradeRepository;
 import com.remat.global.service.R2Service;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class TradeService {
 
     private final TradeRequestRepository tradeRequestRepository;
     private final TradeRepository tradeRepository;
+    private final TradeReviewRepository tradeReviewRepository;
     private final MaterialRepository materialRepository;
     private final R2Service r2Service;
 
@@ -89,5 +92,29 @@ public class TradeService {
                         r2Service.getFileUrl(trade.getTradeRequest().getRequestMaterial().getImageKey())
                 ))
                 .toList();
+    }
+
+    @Transactional
+    public void createTradeReview(Long tradeId, TradeReqDTO.ReviewCreateDTO reqDto, Member reviewer) {
+        Trade trade = tradeRepository.findByIdAndDeletedAtIsNullWithMembers(tradeId)
+                .orElseThrow(() -> new TradeException(TradeErrorCode.TRADE_NOT_FOUND));
+
+        Member reviewee = getReviewee(trade, reviewer);
+
+        if (tradeReviewRepository.existsByTradeAndReviewer(trade, reviewer)) {
+            throw new TradeException(TradeErrorCode.ALREADY_REVIEWED);
+        }
+
+        tradeReviewRepository.save(TradeConverter.toReviewEntity(reqDto, reviewer, reviewee, trade));
+    }
+
+    private Member getReviewee(Trade trade, Member reviewer) {
+        if (trade.getBuyer().getId().equals(reviewer.getId())) {
+            return trade.getSeller();
+        }
+        if (trade.getSeller().getId().equals(reviewer.getId())) {
+            return trade.getBuyer();
+        }
+        throw new TradeException(TradeErrorCode.NOT_TRADE_PARTICIPANT);
     }
 }

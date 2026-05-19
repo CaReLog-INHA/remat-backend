@@ -13,6 +13,9 @@ public enum TradeErrorCode implements ResponseCode {
     RENTAL_DATE_REQUIRED("T400_2", "대여 거래는 대여 기간이 필요합니다."),
     INVALID_RENTAL_DATE("T400_3", "대여 종료일은 시작일보다 이후여야 합니다."),
     QUANTITY_EXCEEDS_STOCK("T400_4", "요청 수량이 재고를 초과합니다."),
+    TRADE_NOT_FOUND("T404_2", "존재하지 않는 거래입니다."),
+    NOT_TRADE_PARTICIPANT("T403_1", "해당 거래의 참여자만 리뷰를 작성할 수 있습니다."),
+    ALREADY_REVIEWED("T409_1", "이미 리뷰를 작성한 거래입니다."),
     ;
 
     private final String statusCode;
