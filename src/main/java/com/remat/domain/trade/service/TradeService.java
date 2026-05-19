@@ -9,6 +9,7 @@ import com.remat.domain.trade.dto.TradeReqDTO;
 import com.remat.domain.trade.dto.TradeResDTO;
 import com.remat.domain.trade.entity.Trade;
 import com.remat.domain.trade.entity.TradeRequest;
+import com.remat.domain.trade.entity.enums.RequestStatus;
 import com.remat.domain.trade.exception.TradeException;
 import com.remat.domain.trade.exception.enums.TradeErrorCode;
 import com.remat.domain.trade.repository.TradeRequestRepository;
@@ -56,6 +57,34 @@ public class TradeService {
 
         TradeRequest tradeRequest = TradeConverter.toEntity(reqDto, member, material);
         tradeRequestRepository.save(tradeRequest);
+    }
+
+    @Transactional
+    public void approveTradeRequest(Long tradeRequestId, TradeReqDTO.ApproveDTO reqDto, Member owner) {
+        TradeRequest tradeRequest = tradeRequestRepository.findByIdAndDeletedAtIsNullWithMembers(tradeRequestId)
+                .orElseThrow(() -> new TradeException(TradeErrorCode.TRADE_REQUEST_NOT_FOUND));
+        Material material = tradeRequest.getRequestMaterial();
+
+        if (!material.getMember().getId().equals(owner.getId())) {
+            throw new TradeException(TradeErrorCode.NOT_MATERIAL_OWNER);
+        }
+        if (tradeRequest.getRequestStatus() != RequestStatus.PENDING) {
+            throw new TradeException(TradeErrorCode.TRADE_REQUEST_NOT_PENDING);
+        }
+        if (tradeRepository.existsByTradeRequest(tradeRequest)) {
+            throw new TradeException(TradeErrorCode.TRADE_ALREADY_EXISTS);
+        }
+        if (tradeRequest.getQuantity() > material.getQuantity()) {
+            throw new TradeException(TradeErrorCode.QUANTITY_EXCEEDS_STOCK);
+        }
+
+        Integer finalPrice = reqDto != null && reqDto.finalPrice() != null
+                ? reqDto.finalPrice()
+                : material.getPrice();
+
+        tradeRequest.accept();
+        material.decreaseQuantity(tradeRequest.getQuantity());
+        tradeRepository.save(TradeConverter.toTradeEntity(tradeRequest, finalPrice));
     }
 
     public List<TradeResDTO.ReceivedRequestDTO> getReceivedTradeRequests(Member member) {

@@ -33,6 +33,19 @@ public class TradeConverter {
                 .build();
     }
 
+    public static Trade toTradeEntity(TradeRequest tradeRequest, Integer finalPrice) {
+        Material material = tradeRequest.getRequestMaterial();
+
+        return Trade.builder()
+                .seller(material.getMember())
+                .buyer(tradeRequest.getRequestMember())
+                .tradeRequest(tradeRequest)
+                .finalPrice(finalPrice)
+                .rentalStart(tradeRequest.getRentalStart())
+                .rentalEnd(tradeRequest.getRentalEnd())
+                .build();
+    }
+
     public static TradeResDTO.ReceivedRequestDTO toReceivedRequestDTO(TradeRequest tradeRequest, String imageUrl) {
         Material material = tradeRequest.getRequestMaterial();
         Member requester = tradeRequest.getRequestMember();

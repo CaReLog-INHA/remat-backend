@@ -21,4 +21,8 @@ public class TradeReqDTO {
             @NotNull @Min(1) @Max(5) Integer starRating,
             @NotBlank String description
     ) {}
+
+    public record ApproveDTO(
+            @Min(0) Integer finalPrice
+    ) {}
 }

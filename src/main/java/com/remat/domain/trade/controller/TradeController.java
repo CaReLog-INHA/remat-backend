@@ -77,6 +77,29 @@ public class TradeController {
     }
 
     @Operation(
+            summary = "거래 요청 승인",
+            description = "로그인한 자재 소유자가 받은 판매/대여 거래 요청을 승인하고 완료 거래를 생성합니다. finalPrice 미입력 시 자재 가격으로 저장됩니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "승인 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청 (대기 상태 아님 / 재고 부족)", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "자재 소유자 아님", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "존재하지 않는 거래 요청", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "이미 생성된 거래", content = @Content),
+    })
+    @PatchMapping("/requests/{tradeRequestId}/approve")
+    public ApiResponse<Void> approveTradeRequest(
+            @Parameter(description = "거래 요청 ID", required = true, example = "1")
+            @PathVariable Long tradeRequestId,
+            @RequestBody(required = false) @Valid TradeReqDTO.ApproveDTO reqDto,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        tradeService.approveTradeRequest(tradeRequestId, reqDto, userDetails.getMember());
+        return ApiResponse.ok();
+    }
+
+    @Operation(
             summary = "내가 구매한 거래 내역 조회",
             description = "로그인한 회원이 구매자로 참여한 완료 거래 내역을 최신순으로 조회합니다."
     )

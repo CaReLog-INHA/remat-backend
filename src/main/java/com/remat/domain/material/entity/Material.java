@@ -63,4 +63,8 @@ public class Material extends BaseEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public void decreaseQuantity(Integer quantity) {
+        this.quantity -= quantity;
+    }
 }

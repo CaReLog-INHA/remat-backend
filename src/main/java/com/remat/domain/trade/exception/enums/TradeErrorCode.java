@@ -16,6 +16,10 @@ public enum TradeErrorCode implements ResponseCode {
     TRADE_NOT_FOUND("T404_2", "존재하지 않는 거래입니다."),
     NOT_TRADE_PARTICIPANT("T403_1", "해당 거래의 참여자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED("T409_1", "이미 리뷰를 작성한 거래입니다."),
+    TRADE_REQUEST_NOT_FOUND("T404_3", "존재하지 않는 거래 요청입니다."),
+    NOT_MATERIAL_OWNER("T403_2", "자재 소유자만 거래 요청을 승인할 수 있습니다."),
+    TRADE_REQUEST_NOT_PENDING("T400_5", "대기 중인 거래 요청만 승인할 수 있습니다."),
+    TRADE_ALREADY_EXISTS("T409_2", "이미 승인되어 거래가 생성된 요청입니다."),
     ;
 
     private final String statusCode;

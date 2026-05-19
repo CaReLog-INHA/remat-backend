@@ -2,6 +2,7 @@ package com.remat.domain.trade.repository;
 
 import com.remat.domain.member.entity.Member;
 import com.remat.domain.trade.entity.Trade;
+import com.remat.domain.trade.entity.TradeRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,4 +46,6 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
             "WHERE t.id = :tradeId " +
             "AND t.deletedAt IS NULL")
     Optional<Trade> findByIdAndDeletedAtIsNullWithMembers(@Param("tradeId") Long tradeId);
+
+    boolean existsByTradeRequest(TradeRequest tradeRequest);
 }
