@@ -11,6 +11,7 @@ import com.remat.domain.trade.entity.TradeRequest;
 import com.remat.domain.trade.exception.TradeException;
 import com.remat.domain.trade.exception.enums.TradeErrorCode;
 import com.remat.domain.trade.repository.TradeRequestRepository;
+import com.remat.domain.trade.repository.TradeRepository;
 import com.remat.global.service.R2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.List;
 public class TradeService {
 
     private final TradeRequestRepository tradeRequestRepository;
+    private final TradeRepository tradeRepository;
     private final MaterialRepository materialRepository;
     private final R2Service r2Service;
 
@@ -67,6 +69,15 @@ public class TradeService {
                 .map(tradeRequest -> TradeConverter.toSentRequestDTO(
                         tradeRequest,
                         r2Service.getFileUrl(tradeRequest.getRequestMaterial().getImageKey())
+                ))
+                .toList();
+    }
+
+    public List<TradeResDTO.PurchasedTradeDTO> getPurchasedTrades(Member member) {
+        return tradeRepository.findPurchasedTradesByBuyer(member).stream()
+                .map(trade -> TradeConverter.toPurchasedTradeDTO(
+                        trade,
+                        r2Service.getFileUrl(trade.getTradeRequest().getRequestMaterial().getImageKey())
                 ))
                 .toList();
     }

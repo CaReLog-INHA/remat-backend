@@ -4,6 +4,7 @@ import com.remat.domain.material.entity.Material;
 import com.remat.domain.member.entity.Member;
 import com.remat.domain.trade.dto.TradeReqDTO;
 import com.remat.domain.trade.dto.TradeResDTO;
+import com.remat.domain.trade.entity.Trade;
 import com.remat.domain.trade.entity.TradeRequest;
 import com.remat.domain.trade.entity.enums.RequestStatus;
 
@@ -72,6 +73,33 @@ public class TradeConverter {
                 tradeRequest.getRentalStart(),
                 tradeRequest.getRentalEnd(),
                 tradeRequest.getCreatedAt()
+        );
+    }
+
+    public static TradeResDTO.PurchasedTradeDTO toPurchasedTradeDTO(Trade trade, String imageUrl) {
+        TradeRequest tradeRequest = trade.getTradeRequest();
+        Material material = tradeRequest.getRequestMaterial();
+        Member seller = trade.getSeller();
+
+        return new TradeResDTO.PurchasedTradeDTO(
+                trade.getId(),
+                tradeRequest.getId(),
+                material.getId(),
+                material.getMaterialName(),
+                trade.getFinalPrice(),
+                tradeRequest.getQuantity(),
+                material.getUnit(),
+                material.getTransactionType(),
+                imageUrl,
+                material.getCategory().getDisplayName(),
+                material.getRegion().getKoreanName(),
+                seller.getId(),
+                seller.getName(),
+                seller.getCompanyName(),
+                seller.getStarRating(),
+                trade.getRentalStart(),
+                trade.getRentalEnd(),
+                trade.getCreatedAt()
         );
     }
 }
