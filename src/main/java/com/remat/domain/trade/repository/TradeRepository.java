@@ -24,4 +24,17 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
             "AND m.deletedAt IS NULL " +
             "ORDER BY t.createdAt DESC")
     List<Trade> findPurchasedTradesByBuyer(@Param("buyer") Member buyer);
+
+    @Query("SELECT t FROM Trade t " +
+            "JOIN FETCH t.seller s " +
+            "JOIN FETCH t.buyer b " +
+            "JOIN FETCH t.tradeRequest tr " +
+            "JOIN FETCH tr.requestMaterial m " +
+            "JOIN FETCH m.category " +
+            "WHERE t.seller = :seller " +
+            "AND t.deletedAt IS NULL " +
+            "AND tr.deletedAt IS NULL " +
+            "AND m.deletedAt IS NULL " +
+            "ORDER BY t.createdAt DESC")
+    List<Trade> findSoldTradesBySeller(@Param("seller") Member seller);
 }

@@ -72,4 +72,25 @@ public class TradeResDTO {
             LocalDate rentalEnd,
             LocalDateTime createdAt
     ) {}
+
+    public record SoldTradeDTO(
+            Long tradeId,
+            Long tradeRequestId,
+            Long materialId,
+            String materialName,
+            Integer finalPrice,
+            Integer requestedQuantity,
+            Integer unit,
+            TransactionType transactionType,
+            String imageUrl,
+            String categoryName,
+            String region,
+            Long buyerId,
+            String buyerName,
+            String buyerCompanyName,
+            Integer buyerStarRating,
+            LocalDate rentalStart,
+            LocalDate rentalEnd,
+            LocalDateTime createdAt
+    ) {}
 }

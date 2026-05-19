@@ -91,4 +91,20 @@ public class TradeController {
         List<TradeResDTO.PurchasedTradeDTO> resDto = tradeService.getPurchasedTrades(userDetails.getMember());
         return ApiResponse.ok(resDto);
     }
+
+    @Operation(
+            summary = "내가 판매한 거래 내역 조회",
+            description = "로그인한 회원이 판매자로 참여한 완료 거래 내역을 최신순으로 조회합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+    })
+    @GetMapping("/history/sold")
+    public ApiResponse<List<TradeResDTO.SoldTradeDTO>> getSoldTrades(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        List<TradeResDTO.SoldTradeDTO> resDto = tradeService.getSoldTrades(userDetails.getMember());
+        return ApiResponse.ok(resDto);
+    }
 }
