@@ -63,4 +63,12 @@ public class Material extends BaseEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    // 임베딩 칼럼
+    @Column(name = "embedding", columnDefinition = "text")
+    private String embedding;
+
+    public void updateEmbedding(String embedding) {
+        this.embedding = embedding;
+    }
 }
