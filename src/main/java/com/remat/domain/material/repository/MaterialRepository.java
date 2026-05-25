@@ -4,6 +4,7 @@ import com.remat.domain.material.entity.Material;
 import com.remat.domain.material.entity.MaterialCategory;
 import com.remat.domain.material.entity.enums.MaterialCondition;
 import com.remat.domain.material.entity.enums.TransactionType;
+import com.remat.domain.member.entity.Member;
 import com.remat.domain.member.entity.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,8 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
 
     Optional<Material> findByIdAndDeletedAtIsNull(Long id);
 
+    List<Material> findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(Member member);
+  
     // 코사인 거리 기준 유사 자재 조회 (embedding::vector 캐스팅 사용)
     @Query(value = "SELECT id, (embedding::vector <=> CAST(:queryVector AS vector)) AS distance " +
                    "FROM material WHERE deleted_at IS NULL AND embedding IS NOT NULL " +

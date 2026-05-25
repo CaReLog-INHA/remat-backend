@@ -77,6 +77,13 @@ public class MaterialService {
                 .toList();
     }
 
+    public List<MaterialResDTO.MyListDTO> getMyMaterials(Member member) {
+        return materialRepository.findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(member)
+                .stream()
+                .map(material -> MaterialConverter.toMyListDTO(material, r2Service.getFileUrl(material.getImageKey())))
+                .toList();
+    }
+
     public MaterialResDTO.DetailDTO getMaterialDetail(Long materialId) {
         Material material = materialRepository.findByIdAndDeletedAtIsNull(materialId)
                 .orElseThrow(() -> new MaterialException(MaterialErrorCode.MATERIAL_NOT_FOUND));

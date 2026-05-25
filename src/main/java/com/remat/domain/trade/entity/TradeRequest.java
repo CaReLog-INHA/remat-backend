@@ -48,4 +48,8 @@ public class TradeRequest extends BaseEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public void accept() {
+        this.requestStatus = RequestStatus.ACCEPTED;
+    }
 }

@@ -67,6 +67,10 @@ public class Material extends BaseEntity {
     // 임베딩 칼럼
     @Column(name = "embedding", columnDefinition = "text")
     private String embedding;
+  
+    public void decreaseQuantity(Integer quantity) {
+        this.quantity -= quantity;
+    }
 
     public void updateEmbedding(String embedding) {
         this.embedding = embedding;

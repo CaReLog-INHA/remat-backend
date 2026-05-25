@@ -43,6 +43,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(ALLOW_URIS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/materials/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/materials/**").permitAll()
                         .anyRequest().authenticated()
                 )

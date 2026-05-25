@@ -21,6 +21,21 @@ public class MaterialResDTO {
             LocalDateTime createdAt
     ) {}
 
+    public record MyListDTO(
+            Long id,
+            String materialName,
+            String description,
+            Integer price,
+            Integer quantity,
+            Integer unit,
+            MaterialCondition materialCondition,
+            TransactionType transactionType,
+            String imageUrl,
+            String categoryName,
+            String region,
+            LocalDateTime createdAt
+    ) {}
+
     public record DetailDTO(
             Long id,
             String materialName,
