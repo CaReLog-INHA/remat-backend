@@ -25,13 +25,13 @@ public class AIAnalysis extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(name = "file_url", columnDefinition = "TEXT", nullable = false)
-    private String fileUrl;
+    @Column(name = "file_key", columnDefinition = "TEXT", nullable = false)
+    private String fileKey;
 
     @Column(name = "matched_count", nullable = false)
     private Integer matchedCount;
 
-    @Column(name = "analysis_result", columnDefinition = "JSON", nullable = false)
+    @Column(name = "analysis_result", columnDefinition = "TEXT", nullable = false)
     private String analysisResult;
 
     @Column(name = "deleted_at")

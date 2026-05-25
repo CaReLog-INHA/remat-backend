@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, Long> {
@@ -20,6 +21,27 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     Optional<Material> findByIdAndDeletedAtIsNull(Long id);
 
     List<Material> findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(Member member);
+  
+    // 코사인 거리 기준 유사 자재 조회 (embedding::vector 캐스팅 사용)
+    @Query(value = "SELECT id, (embedding::vector <=> CAST(:queryVector AS vector)) AS distance " +
+                   "FROM material WHERE deleted_at IS NULL AND embedding IS NOT NULL " +
+                   "ORDER BY distance LIMIT :limit",
+           nativeQuery = true)
+    List<SimilarityProjection> findSimilarMaterials(
+            @Param("queryVector") String queryVector,
+            @Param("limit") int limit
+    );
+
+    interface SimilarityProjection {
+        Long getId();
+        Double getDistance(); // 코사인 거리 (0 = 완전 동일, 1 = 완전 반대)
+    }
+
+    @Query("SELECT m FROM Material m WHERE m.id IN :ids AND m.deletedAt IS NULL")
+    List<Material> findAllByIdIn(@Param("ids") Set<Long> ids);
+
+    @Query("SELECT m FROM Material m WHERE m.embedding IS NULL AND m.deletedAt IS NULL")
+    List<Material> findAllWithNullEmbedding();
 
     @Query("SELECT m FROM Material m WHERE m.deletedAt IS NULL " +
             "AND (:category IS NULL OR m.category = :category) " +
