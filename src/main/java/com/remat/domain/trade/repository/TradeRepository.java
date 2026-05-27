@@ -3,6 +3,7 @@ package com.remat.domain.trade.repository;
 import com.remat.domain.member.entity.Member;
 import com.remat.domain.trade.entity.Trade;
 import com.remat.domain.trade.entity.TradeRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -48,4 +49,26 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     Optional<Trade> findByIdAndDeletedAtIsNullWithMembers(@Param("tradeId") Long tradeId);
 
     boolean existsByTradeRequest(TradeRequest tradeRequest);
+
+    @Query("SELECT t FROM Trade t " +
+            "JOIN FETCH t.seller " +
+            "JOIN FETCH t.tradeRequest tr " +
+            "JOIN FETCH tr.requestMaterial m " +
+            "WHERE t.buyer.id = :memberId " +
+            "AND t.deletedAt IS NULL " +
+            "ORDER BY t.createdAt DESC")
+    List<Trade> findCompletedPurchasesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+    @Query("SELECT t FROM Trade t " +
+            "JOIN FETCH t.buyer " +
+            "JOIN FETCH t.tradeRequest tr " +
+            "JOIN FETCH tr.requestMaterial m " +
+            "WHERE t.seller.id = :memberId " +
+            "AND t.deletedAt IS NULL " +
+            "ORDER BY t.createdAt DESC")
+    List<Trade> findCompletedSalesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+    long countByBuyerIdAndDeletedAtIsNull(Long buyerId);
+
+    long countBySellerIdAndDeletedAtIsNull(Long sellerId);
 }

@@ -21,6 +21,8 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     Optional<Material> findByIdAndDeletedAtIsNull(Long id);
 
     List<Material> findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(Member member);
+
+    List<Material> findByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long memberId);
   
     // 코사인 거리 기준 유사 자재 조회 (embedding::vector 캐스팅 사용)
     @Query(value = "SELECT id, (embedding::vector <=> CAST(:queryVector AS vector)) AS distance " +
