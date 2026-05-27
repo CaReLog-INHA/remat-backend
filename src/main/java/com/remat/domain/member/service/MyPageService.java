@@ -10,7 +10,6 @@ import com.remat.domain.member.entity.Member;
 import com.remat.domain.member.entity.mapping.MemberBadge;
 import com.remat.domain.member.repository.MemberBadgeRepository;
 import com.remat.domain.trade.entity.Trade;
-import com.remat.domain.trade.entity.TradeReview;
 import com.remat.domain.trade.repository.TradeRepository;
 import com.remat.domain.trade.repository.TradeReviewRepository;
 import com.remat.global.service.R2Service;
