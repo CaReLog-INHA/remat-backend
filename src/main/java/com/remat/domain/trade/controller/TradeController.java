@@ -100,6 +100,27 @@ public class TradeController {
     }
 
     @Operation(
+            summary = "거래 요청 거절",
+            description = "로그인한 자재 소유자가 받은 거래 요청을 거절합니다. 완료 거래는 생성하지 않고 거래 요청 상태만 REJECTED로 변경합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "거절 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청 (대기 상태 아님)", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "자재 소유자 아님", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "존재하지 않는 거래 요청", content = @Content),
+    })
+    @PatchMapping("/requests/{tradeRequestId}/reject")
+    public ApiResponse<Void> rejectTradeRequest(
+            @Parameter(description = "거래 요청 ID", required = true, example = "1")
+            @PathVariable Long tradeRequestId,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        tradeService.rejectTradeRequest(tradeRequestId, userDetails.getMember());
+        return ApiResponse.ok();
+    }
+
+    @Operation(
             summary = "내가 구매한 거래 내역 조회",
             description = "로그인한 회원이 구매자로 참여한 완료 거래 내역을 최신순으로 조회합니다."
     )

@@ -52,4 +52,8 @@ public class TradeRequest extends BaseEntity {
     public void accept() {
         this.requestStatus = RequestStatus.ACCEPTED;
     }
+
+    public void reject() {
+        this.requestStatus = RequestStatus.REJECTED;
+    }
 }

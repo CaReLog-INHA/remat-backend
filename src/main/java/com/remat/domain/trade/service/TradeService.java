@@ -87,6 +87,22 @@ public class TradeService {
         tradeRepository.save(TradeConverter.toTradeEntity(tradeRequest, finalPrice));
     }
 
+    @Transactional
+    public void rejectTradeRequest(Long tradeRequestId, Member owner) {
+        TradeRequest tradeRequest = tradeRequestRepository.findByIdAndDeletedAtIsNullWithMembers(tradeRequestId)
+                .orElseThrow(() -> new TradeException(TradeErrorCode.TRADE_REQUEST_NOT_FOUND));
+        Material material = tradeRequest.getRequestMaterial();
+
+        if (!material.getMember().getId().equals(owner.getId())) {
+            throw new TradeException(TradeErrorCode.NOT_MATERIAL_OWNER);
+        }
+        if (tradeRequest.getRequestStatus() != RequestStatus.PENDING) {
+            throw new TradeException(TradeErrorCode.TRADE_REQUEST_NOT_PENDING);
+        }
+
+        tradeRequest.reject();
+    }
+
     public List<TradeResDTO.ReceivedRequestDTO> getReceivedTradeRequests(Member member) {
         return tradeRequestRepository.findReceivedRequestsByOwner(member).stream()
                 .map(tradeRequest -> TradeConverter.toReceivedRequestDTO(
