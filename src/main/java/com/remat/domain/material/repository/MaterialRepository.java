@@ -46,12 +46,16 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findAllWithNullEmbedding();
 
     @Query("SELECT m FROM Material m WHERE m.deletedAt IS NULL " +
+            "AND (:keyword IS NULL " +
+            "OR LOWER(m.materialName) LIKE CONCAT('%', :keyword, '%') " +
+            "OR LOWER(m.description) LIKE CONCAT('%', :keyword, '%')) " +
             "AND (:category IS NULL OR m.category = :category) " +
             "AND (:materialCondition IS NULL OR m.materialCondition = :materialCondition) " +
             "AND (:transactionType IS NULL OR m.transactionType = :transactionType) " +
             "AND (:region IS NULL OR m.region = :region) " +
             "ORDER BY m.createdAt DESC")
     List<Material> findAllWithFilters(
+            @Param("keyword") String keyword,
             @Param("category") MaterialCategory category,
             @Param("materialCondition") MaterialCondition materialCondition,
             @Param("transactionType") TransactionType transactionType,

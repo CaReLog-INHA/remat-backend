@@ -38,6 +38,8 @@ public class MaterialController {
     })
     @GetMapping
     public ApiResponse<List<MaterialResDTO.ListDTO>> getMaterials(
+            @Parameter(description = "검색어 (자재명/설명 기준, 미입력 시 전체 조회)", example = "철근")
+            @RequestParam(required = false) String keyword,
             @Parameter(description = "카테고리 (미입력 시 전체 조회)", example = "콘크리트")
             @RequestParam(required = false) String categoryName,
             @Parameter(description = "자재 상태 (BEST / GOOD / NORMAL)", example = "BEST")
@@ -47,7 +49,8 @@ public class MaterialController {
             @Parameter(description = "지역 (INCHEON, SEOUL 등)", example = "INCHEON")
             @RequestParam(required = false) Region region
     ) {
-        List<MaterialResDTO.ListDTO> resDto = materialService.getMaterials(categoryName, materialCondition, transactionType, region);
+        List<MaterialResDTO.ListDTO> resDto =
+                materialService.getMaterials(keyword, categoryName, materialCondition, transactionType, region);
         return ApiResponse.ok(resDto);
     }
 

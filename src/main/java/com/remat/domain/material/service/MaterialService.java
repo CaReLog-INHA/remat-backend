@@ -63,18 +63,30 @@ public class MaterialService {
     }
 
     public List<MaterialResDTO.ListDTO> getMaterials(
-            String categoryName, MaterialCondition materialCondition, TransactionType transactionType, Region region
+            String keyword,
+            String categoryName,
+            MaterialCondition materialCondition,
+            TransactionType transactionType,
+            Region region
     ) {
+        String normalizedKeyword = normalizeKeyword(keyword);
         MaterialCategory category = null;
         if (categoryName != null) {
             category = materialCategoryRepository.findByDisplayName(categoryName)
                     .orElseThrow(() -> new MaterialException(MaterialErrorCode.CATEGORY_NOT_FOUND));
         }
 
-        return materialRepository.findAllWithFilters(category, materialCondition, transactionType, region)
+        return materialRepository.findAllWithFilters(normalizedKeyword, category, materialCondition, transactionType, region)
                 .stream()
                 .map(material -> MaterialConverter.toListDTO(material, r2Service.getFileUrl(material.getImageKey())))
                 .toList();
+    }
+
+    private String normalizeKeyword(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return null;
+        }
+        return keyword.trim().toLowerCase();
     }
 
     public List<MaterialResDTO.MyListDTO> getMyMaterials(Member member) {
