@@ -1,0 +1,31 @@
+# Build outputs
+build/
+out/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Gradle
+.gradle/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Git
+.git/
+.github/
+.gitignore
+
+# OS
+.DS_Store
+
+# Docs / Local
+HELP.md
+README.md
+*.md
+.env
+.env.*
+
+# Tests (Docker 빌드 단계에서 -x test 라 불필요)
+src/test/
