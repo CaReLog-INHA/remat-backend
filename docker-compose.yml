@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${IMAGE:-ghcr.io/zeoueon/remat-backend:latest}
+    image: ${IMAGE:-ghcr.io/carelog-inha/remat-backend:latest}
     container_name: remat-app
     restart: unless-stopped
     ports:
