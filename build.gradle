@@ -48,8 +48,12 @@ dependencies {
 
     // PDF 파싱
     implementation 'org.apache.pdfbox:pdfbox:3.0.3'
+
+    // 테스트용 인메모리 DB
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
 }
