@@ -46,7 +46,7 @@ public class AuthService {
         memberRepository.save(member);
     }
 
-    public AuthResDTO.LoginDTO login(AuthReqDTO.LoginDTO reqDto) {
+    public AuthResDTO.LoginResDTO login(AuthReqDTO.LoginDTO reqDto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(reqDto.email(), reqDto.password())
@@ -58,10 +58,10 @@ public class AuthService {
         String accessToken = jwtUtil.generateAccessToken(reqDto.email());
         String refreshToken = jwtUtil.generateRefreshToken(reqDto.email());
 
-        return new AuthResDTO.LoginDTO(accessToken, refreshToken);
+        return new AuthResDTO.LoginResDTO(accessToken, refreshToken);
     }
 
-    public AuthResDTO.RefreshTokenDTO refresh(AuthReqDTO.RefreshTokenDTO reqDto) {
+    public AuthResDTO.RefreshTokenResDTO refresh(AuthReqDTO.RefreshTokenDTO reqDto) {
         String refreshToken = reqDto.refreshToken();
 
         if (!jwtUtil.validateToken(refreshToken)|| !jwtUtil.isRefreshToken(refreshToken)) {
@@ -71,6 +71,6 @@ public class AuthService {
         String email = jwtUtil.getEmailFromToken(refreshToken);
         String newAccessToken = jwtUtil.generateAccessToken(email);
 
-        return new AuthResDTO.RefreshTokenDTO(newAccessToken);
+        return new AuthResDTO.RefreshTokenResDTO(newAccessToken);
     }
 }
