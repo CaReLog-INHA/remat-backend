@@ -23,18 +23,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<AuthResDTO.LoginDTO> login(
+    public ApiResponse<AuthResDTO.LoginResDTO> login(
             @RequestBody AuthReqDTO.LoginDTO reqDto
     ){
-        AuthResDTO.LoginDTO resDto = authService.login(reqDto);
+        AuthResDTO.LoginResDTO resDto = authService.login(reqDto);
         return ApiResponse.ok(resDto);
     }
 
     @PostMapping("/refresh")
-    public ApiResponse<AuthResDTO.RefreshTokenDTO> refresh(
+    public ApiResponse<AuthResDTO.RefreshTokenResDTO> refresh(
             @RequestBody AuthReqDTO.RefreshTokenDTO reqDto
     ){
-        AuthResDTO.RefreshTokenDTO resDto = authService.refresh(reqDto);
+        AuthResDTO.RefreshTokenResDTO resDto = authService.refresh(reqDto);
         return ApiResponse.ok(resDto);
     }
 }

@@ -2,12 +2,12 @@ package com.remat.domain.auth.dto;
 
 public class AuthResDTO {
 
-    public record LoginDTO(
+    public record LoginResDTO(
             String accessToken,
             String refreshToken
     ){}
 
-    public record RefreshTokenDTO(
+    public record RefreshTokenResDTO(
             String accessToken
     ){}
 }
