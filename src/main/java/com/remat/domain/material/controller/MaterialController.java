@@ -118,4 +118,14 @@ public class MaterialController {
         MaterialResDTO.DetailDTO resDto = materialService.getMaterialDetail(materialId);
         return ApiResponse.ok(resDto);
     }
+
+    @Operation(
+            summary = "자재 카테고리 목록 조회",
+            description = "자재 카테고리 목록을 조회합니다. 인증 없이 접근 가능합니다."
+    )
+    @GetMapping("/categories")
+    public ApiResponse<MaterialResDTO.CategoryListDTO> getCategories() {
+        MaterialResDTO.CategoryListDTO resDto = materialService.getCategories();
+        return ApiResponse.ok(resDto);
+    }
 }
