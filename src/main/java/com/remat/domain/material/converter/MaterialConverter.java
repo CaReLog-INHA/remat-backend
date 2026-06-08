@@ -77,6 +77,7 @@ public class MaterialConverter {
                 material.getRegion().getKoreanName(),
                 material.getMember().getName(),
                 material.getMember().getCompanyName(),
+                material.getCategory().calculateAvgCarbonReductionKg(),
                 material.getMember().getStarRating(),
                 material.getCreatedAt()
         );

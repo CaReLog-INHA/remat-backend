@@ -20,6 +20,7 @@ public interface TradeRequestRepository extends JpaRepository<TradeRequest, Long
             "WHERE m.member = :owner " +
             "AND tr.deletedAt IS NULL " +
             "AND m.deletedAt IS NULL " +
+            "AND tr.requestStatus = com.remat.domain.trade.entity.enums.RequestStatus.PENDING " +
             "ORDER BY tr.createdAt DESC")
     List<TradeRequest> findReceivedRequestsByOwner(@Param("owner") Member owner);
 
@@ -31,6 +32,7 @@ public interface TradeRequestRepository extends JpaRepository<TradeRequest, Long
             "WHERE tr.requestMember = :requester " +
             "AND tr.deletedAt IS NULL " +
             "AND m.deletedAt IS NULL " +
+            "AND tr.requestStatus = com.remat.domain.trade.entity.enums.RequestStatus.PENDING " +
             "ORDER BY tr.createdAt DESC")
     List<TradeRequest> findSentRequestsByRequester(@Param("requester") Member requester);
 

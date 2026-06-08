@@ -91,4 +91,12 @@ public class MaterialService {
         String imageUrl = r2Service.getFileUrl(material.getImageKey());
         return MaterialConverter.toDetailDTO(material, imageUrl);
     }
+
+    public MaterialResDTO.CategoryListDTO getCategories() {
+        return new MaterialResDTO.CategoryListDTO(materialCategoryRepository.findAll().stream()
+            .map(category -> new MaterialResDTO.CategoryListDTO.CategoryDTO(
+                    category.getId(), category.getCategoryName(), category.getDisplayName())
+            ).toList()
+        );
+    }
 }

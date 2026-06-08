@@ -4,6 +4,7 @@ import com.remat.domain.material.entity.enums.MaterialCondition;
 import com.remat.domain.material.entity.enums.TransactionType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MaterialResDTO {
 
@@ -51,6 +52,7 @@ public class MaterialResDTO {
             String region,
             String sellerName,
             String companyName,
+            Double carbonReductionKg,
             Integer starRating,
             LocalDateTime createdAt
     ) {}
@@ -58,4 +60,14 @@ public class MaterialResDTO {
     public record ImageUploadDTO(
             String imageKey
     ) {}
+
+    public record CategoryListDTO(
+            List<CategoryDTO> categories
+    ) {
+        public record CategoryDTO(
+                Long id,
+                String categoryName,
+                String displayName
+        ) {}
+    }
 }

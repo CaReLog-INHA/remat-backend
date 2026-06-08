@@ -29,4 +29,8 @@ public class MaterialCategory extends BaseEntity {
     // 자재 1kg당 CO2 배출량 (g CO2 eq/kg). 값이 클수록 재사용/대체 시 감축 효과 큼
     @Column(name = "esg_effect", nullable = false)
     private Integer esgEffect;
+
+    public double calculateAvgCarbonReductionKg() {
+        return avgWeightKg * esgEffect / 1000.0;
+    }
 }
