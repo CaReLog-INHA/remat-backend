@@ -52,6 +52,7 @@ public class MaterialResDTO {
             String region,
             String sellerName,
             String companyName,
+            Double carbonReductionKg,
             Integer starRating,
             LocalDateTime createdAt
     ) {}
