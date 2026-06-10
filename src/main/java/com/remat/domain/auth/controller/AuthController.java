@@ -1,5 +1,6 @@
 package com.remat.domain.auth.controller;
 
+import com.remat.domain.auth.controller.docs.AuthApi;
 import com.remat.domain.auth.dto.AuthReqDTO;
 import com.remat.domain.auth.dto.AuthResDTO;
 import com.remat.domain.auth.service.AuthService;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
+    @Override
     @PostMapping("/signup")
     public ApiResponse<Void> signUp(
             @RequestBody AuthReqDTO.SignUpDTO reqDto
@@ -22,6 +24,7 @@ public class AuthController {
         return ApiResponse.ok();
     }
 
+    @Override
     @PostMapping("/login")
     public ApiResponse<AuthResDTO.LoginResDTO> login(
             @RequestBody AuthReqDTO.LoginDTO reqDto
@@ -30,6 +33,7 @@ public class AuthController {
         return ApiResponse.ok(resDto);
     }
 
+    @Override
     @PostMapping("/refresh")
     public ApiResponse<AuthResDTO.RefreshTokenResDTO> refresh(
             @RequestBody AuthReqDTO.RefreshTokenDTO reqDto
