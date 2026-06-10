@@ -1,6 +1,8 @@
 package com.remat.global.config;
 
 import com.remat.global.auth.jwt.JwtAuthFilter;
+import com.remat.global.auth.handler.JwtAuthenticationEntryPoint;
+import com.remat.global.auth.handler.JwtAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAccessDeniedHandler accessDeniedHandler;
 
     private static final String[] ALLOW_URIS = {
             "/auth/**",           // 로그인, 회원가입
@@ -40,6 +44,10 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy((SessionCreationPolicy.STATELESS))
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(ALLOW_URIS).permitAll()
