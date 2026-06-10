@@ -2,11 +2,13 @@ package com.remat.global.exception;
 
 
 import com.remat.global.code.CommonResponseCode;
+import com.remat.global.code.ResponseCode;
 import com.remat.global.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -106,22 +108,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Object> handleCustomException(CustomException e) {
+    public ResponseEntity<ApiResponse<Object>> handleCustomException(CustomException e) {
         log.warn("Custom exception occurred: {}", e.getMessage());
-        if (!e.getMessage().equals(e.getResponseCode().getMessage())) {
-            return ApiResponse.error(e.getResponseCode(), e.getMessage());
-        } else {
-            return ApiResponse.error(e.getResponseCode());
-        }
+        ResponseCode responseCode = e.getResponseCode();
+        return ResponseEntity.status(responseCode.getHttpStatus())
+                .body(ApiResponse.error(responseCode));
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Object> handleRuntimeException(RuntimeException e) {
-        if (e instanceof CustomException) {
-            return handleCustomException((CustomException) e);
-        }
         log.warn("Unhandled runtime exception occurred: {}", e);
         return ApiResponse.error(CommonResponseCode.INTERNAL_SERVER_ERROR);
     }
