@@ -25,7 +25,7 @@ public class MyPageResDTO {
     ) {}
 
     public record ESGContributionDTO(
-            Integer totalCarbonKg,
+            Double totalCarbonKg,
             Integer totalTradeCount,
             Integer resourceReuseRate,
             Integer treeCount
@@ -45,7 +45,7 @@ public class MyPageResDTO {
     public record ESGMonthlyDTO(
             Integer year,
             Integer month,
-            Integer carbonKg
+            Double carbonKg
     ) {}
 
     public record ESGReportDetailDTO(
@@ -53,7 +53,7 @@ public class MyPageResDTO {
             LocalDate tradeDate,
             String materialName,
             Integer quantity,
-            Integer carbonKg
+            Double carbonKg
     ) {}
 
     public record BadgeSectionDTO(

@@ -32,7 +32,7 @@ public class ESGReport extends BaseEntity {
     private LocalDate periodEnd;
 
     @Column(name = "total_carbon_kg", nullable = false)
-    private Integer totalCarbonKg;
+    private Double totalCarbonKg;
 
     @Column(name = "total_trade_count", nullable = false)
     private Integer totalTradeCount;
