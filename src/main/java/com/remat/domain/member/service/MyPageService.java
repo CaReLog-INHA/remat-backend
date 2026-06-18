@@ -51,7 +51,7 @@ public class MyPageService {
 
     public MyPageResDTO.ESGContributionDTO getESGContribution(Member member) {
         ESGReport esgReport = esgReportRepository
-                .findTopByMemberIdAndDeletedAtIsNullOrderByPeriodEndDescCreatedAtDesc(member.getId())
+                .findTopByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(member.getId())
                 .orElse(null);
 
         return MyPageConverter.toESGContributionDTO(esgReport);
@@ -59,7 +59,7 @@ public class MyPageService {
 
     public MyPageResDTO.ESGReportDTO getESGReport(Member member) {
         ESGReport esgReport = esgReportRepository
-                .findTopByMemberIdAndDeletedAtIsNullOrderByPeriodEndDescCreatedAtDesc(member.getId())
+                .findTopByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(member.getId())
                 .orElse(null);
 
         if (esgReport == null) {

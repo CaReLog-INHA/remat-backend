@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +68,23 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
             "AND t.deletedAt IS NULL " +
             "ORDER BY t.createdAt DESC")
     List<Trade> findCompletedSalesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+    @Query("""
+        select t
+        from Trade t
+            join fetch t.tradeRequest tr
+            join fetch tr.requestMaterial rm
+            join fetch rm.category c
+        where (t.buyer.id = :memberId or t.seller.id = :memberId)
+            and t.createdAt >= :periodStart 
+            and t.createdAt < :periodEnd
+            and t.deletedAt is null
+    """)
+    List<Trade> findCompletedTradesByMemberIdAndPeriod(
+            @Param("memberId") Long memberId,
+            @Param("periodStart") LocalDateTime periodStart,
+            @Param("periodEnd") LocalDateTime periodEnd
+    );
 
     long countByBuyerIdAndDeletedAtIsNull(Long buyerId);
 
