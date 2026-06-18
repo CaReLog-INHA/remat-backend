@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +24,20 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(Member member);
 
     List<Material> findByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long memberId);
+
+    // 자원 재활용률 분모: 회원이 해당 기간에 등록한 (삭제 안 된) 자재 수
+    @Query("""
+            SELECT COUNT(m) FROM Material m
+            WHERE m.member.id = :memberId
+                AND m.deletedAt IS NULL
+                AND m.createdAt >= :periodStart
+                AND m.createdAt < :periodEnd
+            """)
+    long countListedMaterialsInPeriod(
+            @Param("memberId") Long memberId,
+            @Param("periodStart") LocalDateTime periodStart,
+            @Param("periodEnd") LocalDateTime periodEnd
+    );
   
     // 코사인 거리 기준 유사 자재 조회 (embedding::vector 캐스팅 사용)
     @Query(value = "SELECT id, (embedding::vector <=> CAST(:queryVector AS vector)) AS distance " +

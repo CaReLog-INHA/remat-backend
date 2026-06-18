@@ -36,7 +36,7 @@ public class ESGReportDetail extends BaseEntity {
     private Integer quantity;
 
     @Column(name = "carbon_kg", nullable = false)
-    private Integer carbonKg;
+    private Double carbonKg;
 
     public void setEsgReport(ESGReport esgReport){
         this.esgReport = esgReport;

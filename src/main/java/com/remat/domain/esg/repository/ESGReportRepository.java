@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ESGReportRepository extends JpaRepository<ESGReport, Long> {
 
-    Optional<ESGReport> findTopByMemberIdAndDeletedAtIsNullOrderByPeriodEndDescCreatedAtDesc(Long memberId);
+    Optional<ESGReport> findTopByMemberIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long memberId);
 }

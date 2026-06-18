@@ -26,7 +26,7 @@ public class ESGReportMonthly extends BaseEntity {
     private Integer month;
 
     @Column(name = "carbon_kg", nullable = false)
-    private Integer carbonKg;
+    private Double carbonKg;
 
     public void setEsgReport(ESGReport esgReport){
         this.esgReport = esgReport;

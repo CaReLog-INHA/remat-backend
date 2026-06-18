@@ -26,7 +26,7 @@ public class MyPageConverter {
 
     public static MyPageResDTO.ESGContributionDTO toESGContributionDTO(ESGReport esgReport) {
         if (esgReport == null) {
-            return new MyPageResDTO.ESGContributionDTO(0, 0, 0, 0);
+            return new MyPageResDTO.ESGContributionDTO(0.0, 0, 0, 0);
         }
 
         return new MyPageResDTO.ESGContributionDTO(
