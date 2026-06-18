@@ -3,8 +3,8 @@ services:
     image: ${IMAGE:-ghcr.io/carelog-inha/remat-backend:latest}
     container_name: remat-app
     restart: unless-stopped
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     env_file:
       - .env
     logging:
@@ -12,3 +12,21 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  caddy:
+    image: caddy:2
+    container_name: remat-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"     # Let's Encrypt 인증서 발급 검증 + HTTP→HTTPS 리다이렉트
+      - "443:443"   # 실제 HTTPS 트래픽
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data       # 발급받은 인증서 영속화 (재시작 시 재발급 방지)
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:
+  caddy_config:
