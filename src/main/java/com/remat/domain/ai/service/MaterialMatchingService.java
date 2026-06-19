@@ -18,8 +18,8 @@ public class MaterialMatchingService {
     private final MaterialRepository materialRepository;
     private final EmbeddingService embeddingService;
 
-    // 코사인 거리 임계값: 0.4 이하면 매칭
-    private static final double SIMILARITY_THRESHOLD = 0.4;
+    // 코사인 거리 임계값: 0.6 이하면 매칭
+    private static final double SIMILARITY_THRESHOLD = 0.6;
     // 각 자재당 유사도 검색 후보 수
     private static final int TOP_K = 3;
 
